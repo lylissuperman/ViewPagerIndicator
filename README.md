@@ -1,140 +1,123 @@
 Android ViewPagerIndicator
 ==========================
 
-Paging indicator widgets that are compatible with the `ViewPager` from the
-[Android Support Library][2] to improve discoverability of content.
-
-Try out the sample application [on the Android Market][10].
-
-![ViewPagerIndicator Sample Screenshots][9]
-
-These widgets can also be used in conjunction with [ActionBarSherlock][3]!
+Android Viewpager Indicator是Android开发中最常用的控件之一，几乎所有的新闻类APP中都有使用，下面介绍其基本使用方法。
 
 
 
 Usage
 =====
 
-*For a working implementation of this project see the `sample/` folder.*
+1. ViewPager Indicator的Library
 
-  1. Include one of the widgets in your view. This should usually be placed
-     adjacent to the `ViewPager` it represents.
+查看Viewpager Indicator的Library代码，可以看到此项目的设计思想：
+首先定义了一个PageIndicator接口，它里面定义了最重要和基本的indicator表现出的一些方法：
+    1.1 首先一个indicator必须要与一个ViewPager关联在一起，所以它提供了一个setViewPager方法。
+    1.2 它扩展了ViewPager.OnPageChangeListener接口，表示接管了ViewPager的Pager改变时的监听处理，
+          这也是为什么为ViewPager设置OnPageChangeListener监听器时不能设置在ViewPager上而必须设置在
+          indicator上的原因。
+    1.3 还有一个notifyDataSetChanged通知方法，表示为这个ViewPager提供View(一般是Fragment)的  Adapter 里面的数据集发生变化时，执行的动作，这里可增加相关的逻辑。
 
-        <com.viewpagerindicator.TitlePageIndicator
-            android:id="@+id/titles"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent" />
+2. Viewpager Indicator的实现类
 
-  2. In your `onCreate` method (or `onCreateView` for a fragment), bind the
-     indicator to the `ViewPager`.
+ 然后再看下Viewpager Indicator的实现类，共有6个，由6个类分别实现，它们分别为：
+    2.1 小圆圈类型的
+    2.2 带图标类型的                    
+    2.3 小横线类型的，距离屏幕最下边端有一定的距离。
+    2.4 标签类型的（Tab）
+    2.5 标题类型的，与标签类型的有点像，但它当前的标题页的左/右边的标题会卷起，即往两端缩进去。
+    2.6 屏幕底部小横线类型的，并且会占满整行。                    
+                    
 
-         //Set the pager with an adapter
-         ViewPager pager = (ViewPager)findViewById(R.id.pager);
-         pager.setAdapter(new TestAdapter(getSupportFragmentManager()));
+3. Viewpager Indicator随附带的Demo
 
-         //Bind the title indicator to the adapter
-         TitlePageIndicator titleIndicator = (TitlePageIndicator)findViewById(R.id.titles);
-         titleIndicator.setViewPager(pager);
+    3.1 Demo项目的设计
+    项目由一个ListSamples的ListActivity入口，它主要用作组装所有的子indicator的列表。
+    TestFragment.java，所有ViewPager上真正显示的视图。
+    TestFragmentAdapter.java，所有ViewPager里的Adapter，为ViewPager生成TestFragment。
+    Samplexxx.java，所有的indicator的显示，一个类显示一种使用方法或特性。
 
-  3. *(Optional)* If you use an `OnPageChangeListener` with your view pager
-     you should set it in the indicator rather than on the pager directly.
+    3.2 具体使用方法
+    查看SampleCirclesDefault.java基本就可以明白它的基本使用方法：
+    首先，把Indicator包含进xml文件中，如下，注意它应该紧邻在ViewPager的上方或下方，总之要挨在一起。
+    
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/titles"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent" />
 
-         //continued from above
-         titleIndicator.setOnPageChangeListener(mPageChangeListener);
-
-
-Theming
--------
-
-There are three ways to style the look of the indicators.
-
- 1. **Theme XML**. An attribute for each type of indicator is provided in which
-    you can specify a custom style.
- 2. **Layout XML**. Through the use of a custom namespace you can include any
-    desired styles.
- 3. **Object methods**. Both styles have getters and setters for each style
-    attribute which can be changed at any point.
-
-Each indicator has a demo which creates the same look using each of these
-methods.
-
-
-Including In Your Project
--------------------------
-
-Android-ViewPagerIndicator is presented as an [Android library project][7]. A
-standalone JAR is not possible due to the theming capabilities offered by the
-indicator widgets.
-
-You can include this project by [referencing it as a library project][8] in
-Eclipse or ant.
-
-If you are a Maven user you can easily include the library by specifying it as
-a dependency:
-
-    <dependency>
-      <groupId>com.viewpagerindicator</groupId>
-      <artifactId>library</artifactId>
-      <version>2.4.1</version>
-      <type>apklib</type>
-    </dependency>
-
-This project depends on the `ViewPager` class which is available in the
-[Android Support Library][2] or [ActionBarSherlock][3]. Details for
-including one of those libraries is available on their respecitve web sites.
-
-
-
-
-Developed By
-============
-
- * Jake Wharton - <jakewharton@gmail.com>
-
-
-Credits
--------
-
- * [Patrik Åkerfeldt][1] - Author of [ViewFlow][4], a precursor to the ViewPager,
-   which supports paged views and is the original source of both the title
-   and circle indicators.
- * [Francisco Figueiredo Jr.][5] - Idea and [first implementation][6] for
-   fragment support via ViewPager.
-
-
-
-
-License
-=======
-
-    Copyright 2012 Jake Wharton
-    Copyright 2011 Patrik Åkerfeldt
-    Copyright 2011 Francisco Figueiredo Jr.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
-
-
-
-
-
- [1]: https://github.com/pakerfeldt
- [2]: http://developer.android.com/sdk/compatibility-library.html
- [3]: http://actionbarsherlock.com
- [4]: https://github.com/pakerfeldt/android-viewflow
- [5]: https://github.com/franciscojunior
- [6]: https://gist.github.com/1122947
- [7]: http://developer.android.com/guide/developing/projects/projects-eclipse.html
- [8]: http://developer.android.com/guide/developing/projects/projects-eclipse.html#ReferencingLibraryProject
- [9]: https://raw.github.com/JakeWharton/Android-ViewPagerIndicator/master/sample/screens.png
- [10]: https://play.google.com/store/apps/details?id=com.viewpagerindicator.sample
+    其次，使用titleIndicator.setViewPager(pager)把两者绑定在一起，如下所示： 
+    //Set the pager with an adapter
+     ViewPager pager = (ViewPager)findViewById(R.id.pager);
+     pager.setAdapter(new TestAdapter(getSupportFragmentManager()));
+     
+     //Bind the title indicator to the adapter
+     TitlePageIndicator titleIndicator = (TitlePageIndicator)findViewById(R.id.titles);
+     titleIndicator.setViewPager(pager);
+     
+    最后，如果你要监听ViewPager中包含的Fragment的改变(手滑动切换了页面)，使用OnPageChangeListener为它指定一个监听器，那么不能直接设置在ViewPager上，而要设置在Indicator上，如下所示： 
+     //continued from above
+     titleIndicator.setOnPageChangeListener(mPageChangeListener);
+     
+   4.修改indicator的样式（Theme） 
+    4.1 Theme XML，在AndroidManifest.xml中相应的Activity中设置，比如： 
+     <activity
+            android:name=".SampleCirclesStyledTheme"
+            android:label="Circles/Styled (via theme)"
+            android:theme="@style/StyledIndicators">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.jakewharton.android.viewpagerindicator.sample.SAMPLE" />
+            </intent-filter>
+        </activity>
+    android:theme="@style/StyledIndicators" ==> values/styles.xml中相应部分为： 
+      <resources>
+      <style name="StyledIndicators" parent="@android:style/Theme.Light">
+          <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
+          <item name="vpiLinePageIndicatorStyle">@style/CustomLinePageIndicator</item>
+          <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
+          <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+          <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
+      </style>
+    4.2 Layout XML，在Layout XML方法中指定，如下：
+      <android.support.v4.view.ViewPager
+          android:id="@+id/pager"
+          android:layout_width="fill_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
+          />
+      <com.viewpagerindicator.CirclePageIndicator
+          android:id="@+id/indicator"
+          android:padding="10dip"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:background="#FFCCCCCC"
+          app:radius="10dp"
+          app:fillColor="#FF888888"
+          app:pageColor="#88FF0000"
+          app:strokeColor="#FF000000"
+          app:strokeWidth="2dp"
+          />
+          
+    4.3    Object methods，直接在代码中设置，如下： 
+          CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
+          mIndicator = indicator;
+          indicator.setViewPager(mPager);
+   
+          final float density = getResources().getDisplayMetrics().density;
+          indicator.setBackgroundColor(0xFFCCCCCC);
+          indicator.setRadius(10 * density);
+          indicator.setPageColor(0x880000FF);
+          indicator.setFillColor(0xFF888888);
+          indicator.setStrokeColor(0xFF000000);
+          indicator.setStrokeWidth(2 * density);
+    
+     具体有哪些属性可以参考library项目中的vpi__attrs.xml文件。
+    
+    
+    
+    
+    
+    
+ 
+ 
