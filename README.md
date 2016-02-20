@@ -37,16 +37,17 @@ Usage
     TestFragmentAdapter.java，所有ViewPager里的Adapter，为ViewPager生成TestFragment。
     Samplexxx.java，所有的indicator的显示，一个类显示一种使用方法或特性。
 
-    3.2 具体使用方法
-    查看SampleCirclesDefault.java基本就可以明白它的基本使用方法：
-    首先，把Indicator包含进xml文件中，如下，注意它应该紧邻在ViewPager的上方或下方，总之要挨在一起。
+3.2 具体使用方法
+查看SampleCirclesDefault.java基本就可以明白它的基本使用方法：
+首先，把Indicator包含进xml文件中，如下，注意它应该紧邻在ViewPager的上方或下方，总之要挨在一起。
     
     <com.viewpagerindicator.TitlePageIndicator
         android:id="@+id/titles"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent" />
 
-    其次，使用titleIndicator.setViewPager(pager)把两者绑定在一起，如下所示： 
+其次，使用titleIndicator.setViewPager(pager)把两者绑定在一起，如下所示： 
+    
     //Set the pager with an adapter
      ViewPager pager = (ViewPager)findViewById(R.id.pager);
      pager.setAdapter(new TestAdapter(getSupportFragmentManager()));
@@ -55,12 +56,14 @@ Usage
      TitlePageIndicator titleIndicator = (TitlePageIndicator)findViewById(R.id.titles);
      titleIndicator.setViewPager(pager);
      
-    最后，如果你要监听ViewPager中包含的Fragment的改变(手滑动切换了页面)，使用OnPageChangeListener为它指定一个监听器，那么不能直接设置在ViewPager上，而要设置在Indicator上，如下所示： 
+    最后，如果你要监听ViewPager中包含的Fragment的改变(手滑动切换了页面)，使用OnPageChangeListener为它指定一个监听器，那么不能直接设置在ViewPager上，而要设置在Indicator上，如下所示：
+    
      //continued from above
      titleIndicator.setOnPageChangeListener(mPageChangeListener);
      
    4.修改indicator的样式（Theme） 
     4.1 Theme XML，在AndroidManifest.xml中相应的Activity中设置，比如： 
+    
      <activity
             android:name=".SampleCirclesStyledTheme"
             android:label="Circles/Styled (via theme)"
@@ -70,7 +73,9 @@ Usage
                 <category android:name="com.jakewharton.android.viewpagerindicator.sample.SAMPLE" />
             </intent-filter>
         </activity>
+        
     android:theme="@style/StyledIndicators" ==> values/styles.xml中相应部分为： 
+    
       <resources>
       <style name="StyledIndicators" parent="@android:style/Theme.Light">
           <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
@@ -79,7 +84,9 @@ Usage
           <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
           <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
       </style>
+      
     4.2 Layout XML，在Layout XML方法中指定，如下：
+    
       <android.support.v4.view.ViewPager
           android:id="@+id/pager"
           android:layout_width="fill_parent"
@@ -99,7 +106,8 @@ Usage
           app:strokeWidth="2dp"
           />
           
-    4.3    Object methods，直接在代码中设置，如下： 
+    4.3    Object methods，直接在代码中设置，如下：
+    
           CirclePageIndicator indicator = (CirclePageIndicator)findViewById(R.id.indicator);
           mIndicator = indicator;
           indicator.setViewPager(mPager);
